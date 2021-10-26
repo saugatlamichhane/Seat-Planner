@@ -1,0 +1,1 @@
+# The object "school" must have attributes schoolName, schoolAddress, leastGrade, highestGrade and roomList.

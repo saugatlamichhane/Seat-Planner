@@ -1,0 +1,1 @@
+# The object "room" must have attributes roomSN, emptySeats roomSeatFinal.
