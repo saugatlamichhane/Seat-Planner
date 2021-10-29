@@ -1,3 +1,7 @@
+# TODO Add a README in github project
+# TODO Learn about licenses
+# TODO Add a licence in github project
+
 from School import School
 from Grade import Grade
 from Room import Room
@@ -27,6 +31,9 @@ while grade_sn_counter + 1 > school.leastGrade:
     allot_seat(grade_sn_counter)
     grade_sn_counter -= 1
 
+# TODO Create PDF file.
+
+# Allots seat for each student of the grade
 def allot_seat(grade_sn):
     # Create a grade object
     grade = Grade(grade_sn)
@@ -52,7 +59,7 @@ def allot_seat(grade_sn):
         # TODO allot the seats for random student not in increasing order of Roll No.
         # Remove that seat form "emptySeats" and remove that student from "nonAllotedStds".
         # TODO check if seat is available and allot the appropriate seat for him/her.
-        
+
 #Returns two-digit number as string
 def format_number(number):
     if number < 10:
