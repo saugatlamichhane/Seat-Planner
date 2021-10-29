@@ -1,7 +1,5 @@
 # The object "grade" must have attributes gradeSN, sectionsList, noOfStds and nonAllotedStds.
 class Grade:
-    def __init__(self, gradesn, noofstds):
-        self.gradeSN = gradesn
-        self.noOfStds = noofstds
-        self.sectionsList = []
-        self.nonAllotedStds = []
+    def __init__(self, grade_sn):
+        self.gradeSN = grade_sn
+        self.students = []
