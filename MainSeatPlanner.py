@@ -6,88 +6,6 @@ from School import School
 from Grade import Grade
 from Room import Room
 
-# Create object "school" and set the attributes from user input.
-school_name = input("Enter the name of school:")
-school_address = input("Enter the address of school:")
-least_grade = input("Grades start from:")
-highest_grade = input("Upto which grade: ")
-school = School(school_name, school_address, least_grade, highest_grade)
-
-# Take the examination infos as user input.
-examination_name = input("Enter the title of examination:")
-examination_year = input("Enter the examination year:")
-
-# Set the room_counter
-room_counter = 1
-# Add the first room to roomList
-current_room = room(room_counter)
-# TODO modify in order to adapt this program for exam rooms with unequal number of rooms in door and corner side
-# TODO find pattern in this section and inside for loop of students
-no_of_desks_in_each_side = int(input("How many desks are there in each side of Room No. 1?"))
-# Add each seat to emptySeats
-for i in range(1, no_of_desks_in_each_side * 2 + 1):
-    for j in range(1, 3 + 1):
-        current_room.append("SN" + format_number(1) + format_number(i) + str(j))
-
-# Starting from highestGrade, allot seats for each student in each grade
-grade_sn_counter = school.highestGrade
-while grade_sn_counter + 1 > school.leastGrade:
-    allot_seat(grade_sn_counter)
-    grade_sn_counter -= 1
-
-for room in school.roomList:
-    print(room.roomSeatFinal)
-# TODO Create PDF file.
-
-# Allots seat for each student of the grade
-def allot_seat(grade_sn):
-    # Create a grade object
-    grade = Grade(grade_sn)
-    # Set current_room_available_seats
-    grade.current_room_available_seats = list(current_room.emptySeats)
-    # For creating a list of sections, taking user input
-    no_of_sections = input("How many sections are there in grade " + grade_sn + "?")
-    sections_string = input("What are those sections?(Use space as separator between sections.)")
-    # Creates a list of sections
-    sections = sections_string.split()
-    for i in range(len(sections) + 1):
-        # Capitalizing the first letter of the word
-        current_section = sections[i].capitalize()
-        # Taking the first letter of the capitalized word and replacing the corresponding section in the sections list
-        sections[i] = current_section[0]
-    for section in sections:
-        no_of_students = input("How many students are there in " + grade.gradeSN + "'" + section +"'?")
-        for j in range(1, no_of_students + 1):
-            # Assigning symbol number to each student
-            student = format_number(grade.gradeSN) + format_number(j) + "'" + section +"'"
-            # Adding each student to the students list of the corresponding grade
-            grade.students.append(student)
-    for student in students:
-        # If current_room doesn't have any available seats for the students in current grade, move onto the next room.
-        if len(grade.current_room_available_seats) == 0:
-            global room_counter += 1
-            # If roomList doesn't have another room, add new_room and move onto the new room.
-            if len(school.roomList) < room_counter:
-                new_room = Room(room_counter)
-                no_of_desks_in_each_side = int(input("How many desks are there in each side of Room No. " + room_counter + "?"))
-                # Add each seat to emptySeats
-                for i in range(1, no_of_desks_in_each_side * 2 + 1):
-                    for j in range(1, 3 + 1):
-                        current_room.append("SN" + format_number(room_counter) + format_number(i) + str(j))
-                school.roomList.append(new_room)
-            global current_room = school.roomList[room_counter - 1]
-            grade.current_room_available_seats = list(current_room.emptySeats)
-        # Else place the student in the first available seat
-        # Remove that seat form "emptySeats" and update current_room_available_seats
-        else:
-            #TODO adapt this for creating gradewise seat planning list
-            current_seat = grade.current_room_available_seats[0]
-            current_room.roomSeatFinal.update({current_seat: student})
-            current_room.remove(current_seat)
-            school.roomList[room_counter - 1] = current_room
-            grade.current_room_available_seats = update_available_seats(grade.current_room_available_seats, current_seat)
-        # TODO allot the seats for random student not in increasing order of Roll No.
-
 # Returns two-digit number as string
 def format_number(number):
     if number < 10:
@@ -99,11 +17,11 @@ def format_number(number):
 def update_available_seats(available_seats_list, alloted_seat):
     # Prepare a list of seats to remove
     seats_to_remove = []
-    room_sn = alloted_seat[2:4]
-    desk_sn = alloted_seat[4:6]
-    seat_sn = alloted_seat[6:]
+    room_sn = int(alloted_seat[2:4])
+    desk_sn = int(alloted_seat[4:6])
+    seat_sn = int(alloted_seat[6:])
     # Add the seats in current desk as well as surrounding desk of the same side to the seats_to_remove list
-    for i in (-2,4,2):
+    for i in range(-2,4,2):
         for j in range(1, 3 + 1):
             seats_to_remove.append("SN" + format_number(room_sn) + format_number(desk_sn + i) + str(j))
     # For the seats in another side 
@@ -123,3 +41,87 @@ def update_available_seats(available_seats_list, alloted_seat):
         if seat in available_seats_list:
             available_seats_list.remove(seat)
     return available_seats_list
+
+# Allots seat for each student of the grade
+def allot_seat(grade_sn):
+    # Set current_room to the first room
+    current_room = school.roomList[0]
+    # Create a grade object
+    grade = Grade(grade_sn)
+    # Set the current_room_available_seats for the grade
+    grade.current_room_available_seats = list(current_room.emptySeats)
+    # For creating a list of sections, taking user input
+    no_of_sections = input("How many sections are there in grade " + str(grade_sn) + "?")
+    sections_string = input("What are those sections?(Use space as separator between sections.)")
+    # Creates a list of sections
+    sections = sections_string.split()
+    for i in range(len(sections)):
+        # Capitalizing the first letter of the word
+        current_section = sections[i].capitalize()
+        # Taking the first letter of the capitalized word and replacing the corresponding section in the sections list
+        sections[i] = current_section[0]
+    for section in sections:
+        no_of_students = int(input("How many students are there in " + str(grade.gradeSN) + "'" + section +"'?"))
+        for j in range(1, no_of_students + 1):
+            # Assigning symbol number to each student
+            student = format_number(grade.gradeSN) + format_number(j) + "'" + section +"'"
+            # Adding each student to the students list of the corresponding grade
+            grade.students.append(student)
+    for student in grade.students:
+        # If current_room doesn't have any available seats for the students in current grade, move onto the next room.
+        if len(grade.current_room_available_seats) == 0:
+            global room_counter
+            room_counter += 1
+            # If roomList doesn't have another room, add new_room and move onto the new room.
+            if len(school.roomList) < room_counter:
+                new_room = Room(room_counter)
+                no_of_desks_in_each_side = int(input("How many desks are there in each side of Room No. " + str(room_counter) + "?"))
+                # Add each seat to emptySeats
+                for i in range(1, no_of_desks_in_each_side * 2 + 1):
+                    for j in range(1, 3 + 1):
+                        new_room.emptySeats.append("SN" + format_number(room_counter) + format_number(i) + str(j))
+                school.roomList.append(new_room)
+            current_room = school.roomList[room_counter - 1]
+            grade.current_room_available_seats = list(current_room.emptySeats)
+        # Else place the student in the first available seat
+        # Remove that seat form "emptySeats" and update current_room_available_seats
+        else:
+            #TODO adapt this for creating gradewise seat planning list
+            current_seat = grade.current_room_available_seats[0]
+            current_room.roomSeatFinal.update({current_seat: student})
+            # TODO update current room available seats is not working
+            current_room.emptySeats.remove(current_seat)
+            school.roomList[room_counter - 1] = current_room
+            grade.current_room_available_seats = list(update_available_seats(grade.current_room_available_seats, current_seat))
+        # TODO allot the seats for random student not in increasing order of Roll No.
+
+# Create object "school" and set the attributes from user input.
+school_name = input("Enter the name of school:")
+school_address = input("Enter the address of school:")
+least_grade = int(input("Grades start from:"))
+highest_grade = int(input("Upto which grade: "))
+school = School(school_name, school_address, least_grade, highest_grade)
+
+# Take the examination infos as user input.
+examination_name = input("Enter the title of examination:")
+examination_year = input("Enter the examination year:")
+
+room_counter = 1
+# Create the first room and add it to the roomList
+new_room = Room(room_counter)
+no_of_desks_in_each_side = int(input("How many desks are there in each side of Room No. " + str(room_counter) + "?"))
+# Add each seat to emptySeats
+for i in range(1, no_of_desks_in_each_side * 2 + 1):
+    for j in range(1, 3 + 1):
+        new_room.emptySeats.append("SN" + format_number(room_counter) + format_number(i) + str(j))
+school.roomList.append(new_room)
+
+# Starting from highestGrade, allot seats for each student in each grade
+grade_sn_counter = school.highestGrade
+while grade_sn_counter + 1 > school.leastGrade:
+    allot_seat(grade_sn_counter)
+    grade_sn_counter -= 1
+
+for room in school.roomList:
+    print(room.roomSeatFinal)
+# TODO Create PDF file.
