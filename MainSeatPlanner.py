@@ -91,7 +91,6 @@ def allot_seat(grade_sn):
         #TODO adapt this for creating gradewise seat planning list
         current_seat = grade.current_room_available_seats[0]
         current_room.roomSeatFinal.update({current_seat: student})
-        # TODO update current room available seats is not working
         current_room.emptySeats.remove(current_seat)
         school.roomList[current_room_counter - 1] = current_room
         grade.current_room_available_seats = list(update_available_seats(grade.current_room_available_seats, current_seat))
