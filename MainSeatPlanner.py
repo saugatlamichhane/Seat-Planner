@@ -1,6 +1,4 @@
-# TODO Add a README in github project
-# TODO Learn about licenses
-# TODO Add a licence in github project
+# This program makes allocating seats to people for exams easier
 
 from School import School
 from Grade import Grade
