@@ -33,7 +33,7 @@ def get_symbol_start():
 
 def get_symbol_end(start_symbol, num_examinees):
     # TODO Make Symbol Number of Equal Length
-    return start_symbol + num_examinees
+    return start_symbol + num_examinees - 1 
 
 def assign_groups(group_list):
     start_symbol = get_symbol_start()
@@ -41,7 +41,7 @@ def assign_groups(group_list):
     end_symbol = get_symbol_end(start_symbol, num_examinees)
     for sn in range(start_symbol, end_symbol+1):
         curr_group = random.randint(0, len(group_list)-1)
-        group_list[curr_group].examinees.append(sn)
+        group_list[curr_group].examinees.append(str(sn))
     return group_list
 
 
